@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0a0b24">
+<title>Event Support</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main class="app">
+
+  <!-- トップ -->
+  <section id="home" class="screen" hidden>
+    <header class="hero">
+      <h1>ブラスタS7最終章</h1>
+      <p>目標とする対決ptに必要なアイテム数やボーダーの確認ができます</p>
+    </header>
+
+
+<div id="home-border-card">
+  <div class="home-border-heading">
+    <span>本日の1%ボーダー</span>
+    <span id="home-border-day">読み込み中</span>
+  </div>
+
+  <div class="home-border-casts">
+    <div class="home-border-cast">
+      <p id="home-border-cast-1">---</p>
+      <p id="home-border-point-1">---</p>
+    </div>
+    <div class="home-border-cast">
+      <p id="home-border-cast-2">---</p>
+      <p id="home-border-point-2">---</p>
+    </div>
+  </div>
+
+  <p id="home-border-time">最終更新：---</p>
+  <a href="#border" class="home-border-link">
+    詳しいボーダーを見る ›
+  </a>
+</div>
+
+
+    <nav class="menu">
+      <a href="#calc" class="menu-item"><b>対決ptを計算する</b><span>1公演あたりの獲得pt</span></a>
+      <a href="#goal" class="menu-item"><b>目標まで計算する</b><span>必要チケポ・ペース・ダイヤ</span></a>
+      <a href="#border" class="menu-item"><b>ボーダーの確認・記録</b><span>ボーダーの確認・記録</span></a>
+    </nav>
+
+  </section>
+
+  <!-- 対決pt計算 -->
+  <section id="calc" class="screen" hidden>
+    <a href="#home" class="back">トップへ戻る</a>
+    <h2>対決ptを計算する</h2>
+
+    <div class="result" aria-live="polite">
+      <div class="result-label" id="finalLabel">最終獲得対決pt</div>
+      <div class="result-num"><span id="finalPt">0</span><small>pt</small></div>
+      <div class="result-note" id="finalNote"></div>
+    </div>
+
+    <form class="panel" id="calcForm" onsubmit="return false">
+      <label class="field">ヒロインレベル
+        <input type="number" id="lv" min="0" step="1" inputmode="numeric" min="1" value="253">
+      </label>
+      <label class="field">公演スコアpt（任意、対決pt詳細で表示される数値）
+        <input type="number" id="score" min="0" step="1" inputmode="numeric" min="0" placeholder="空欄でも計算できます">
+      </label>
+      <label class="field">チップ枚数（0〜30）
+        <input
+          type="number"
+          id="chip"
+          min="0"
+          max="30"
+          step="1"
+       inputmode="numeric" min="0" max="30" value="0">
+      </label>
+      <label class="switch"><input type="checkbox" id="target"><span>対象キャスト（+100pt）</span></label>
+      <label class="switch"><input type="checkbox" id="special"><span>特効カード（+200pt）</span></label>
+      <label class="switch"><input type="checkbox" id="double"><span>チケポ2枚使用（合計×2）</span></label>
+    </form>
+
+    <div class="panel">
+      <h3>内訳</h3>
+      <dl class="rows" id="rows"></dl>
+    </div>
+       <a href="#home" class="back-home">トップへ戻る</a>
+
+  </section>
+
+  <!-- 目標pt計算 -->
+  <section id="goal" class="screen" hidden>
+    <a href="#home" class="back">トップへ戻る</a>
+    <h2>目標まで計算する</h2>
+
+    <div class="result" aria-live="polite">
+      <div class="result-label">必要チケポ<br>消費2倍の場合は下記計算結果を2で割ってください</div>
+      <div class="result-num"><span id="needRange">-</span><small>枚</small></div>
+      <div class="result-note" id="needNote"></div>
+    </div>
+
+    <form class="panel" onsubmit="return false">
+      <label class="field">現在の対決pt
+        <input type="number" id="cur" min="0" step="1" inputmode="numeric" min="0" value="0">
+      </label>
+      <label class="field">目標対決pt
+        <input type="number" id="tgt" min="0" step="1" inputmode="numeric" min="0" value="1000000">
+      </label>
+      
+      <div class="two">
+        <label class="field">消費2倍・1回の獲得対決pt（下限）
+          <input type="number" id="perLow" min="1" step="1" inputmode="numeric" value="14000">
+        </label>
+        <label class="field">消費2倍・1回の獲得対決pt（上限）
+          <input type="number" id="perHigh" min="1" step="1" inputmode="numeric" value="16000">
+        </label>
+      </div>
+
+      <div class="two">
+        <label class="field">フラスタ購入数
+          <input
+            type="number"
+            id="flasta"
+            min="0"
+            max="10"
+            step="1"
+        inputmode="numeric" min="0" value="0">
+        </label>
+        <label class="field">アクセ購入数
+          <input type="number" id="acce" min="0" step="1" inputmode="numeric" min="0" value="0">
+        </label>
+      </div>
+      <p class="hint">ギフトは、現在の対決ptとは別にこれから獲得するptとして計算します。<br>スコアは毎回変わるため、獲得ptは目安を入力してください。獲得ptはチケポ消費2倍・1回の対決分を入力してください。必要チケポは、公演回数に2を掛けて計算します。</p>
+
+    </form>
+
+    <div class="panel">
+      <h3>チケポ・時間</h3>
+      <label class="field">現在のチケポ（枚）
+        <input type="number" id="tkNow" min="0" step="1" inputmode="numeric" min="0" value="5">
+      </label>
+      <div class="seg" role="radiogroup" aria-label="残り時間の入力方法">
+        <label><input type="radio" name="tkMode" value="auto" checked><span>自動</span></label>
+        <label><input type="radio" name="tkMode" value="manual"><span>手入力</span></label>
+      </div>
+      <p class="hint" id="tkAutoNote"></p>
+      <div class="two" id="tkManual" hidden>
+        <label class="field">残り時間（時間）
+          <input type="number" id="tkHour" min="0" step="1" inputmode="numeric" min="0" value="24">
+        </label>
+        <label class="field">残り時間（分）
+            <input
+              type="number"
+              id="tkMin"
+              min="0"
+              max="59"
+              step="1"
+        <input type="number" inputmode="numeric" min="0" max="59" value="0">
+        </label>
+      </div>
+      <dl class="rows" id="tkRows"></dl>
+      <p class="hint hint-top">残り時間の自動計算は、端末の現在時刻から次の14:59（1日の終了）までです。自然回復は20分に1枚、回復アイテムは1個で5枚回復として計算します。チケポが上限（5枚）の間は自然回復が止まるため、使い続ける前提の目安です。</p>
+    </div>
+
+    <div class="panel">
+      <h3>ペース</h3>
+      <dl class="rows" id="pcRows"></dl>
+      <p class="hint hint-top">ギフト分を差し引いた「チケポで稼ぐ分」を、残り時間で割った値です。<br>残り時間は上記の「チケポ・時間」と同じです。</p>
+    </div>
+
+    <div class="panel">
+      <h3>ダイヤ</h3>
+      <label class="field">所持ダイヤ（任意）
+        <input type="number" id="dmOwned" min="0" step="1" inputmode="numeric" min="0" placeholder="空欄でも計算できます">
+      </label>
+      <label class="field">購入済みフラスタ（今日の5:00以降）
+        <input type="number"  min="0" step="1" id="flBought" inputmode="numeric" min="0" max="10" value="0">
+      </label>
+      <dl class="rows" id="dmRows"></dl>
+      <p class="hint hint-top" id="dmNote"></p>
+      <h3 class="h3-gap">1ダイヤあたりの獲得pt</h3>
+      <dl class="rows" id="dmEff"></dl>
+      <p class="hint hint-top">フラスタ・アクセは、上で入力した数を購入する前提です。チケポ回復は100ダイヤで計算しています。チケポ回復の効率は、1チケポあたりの獲得pt（上限・下限）を参照しています。フラスタは購入間隔20分・1日10個までとし、5:00に購入数がリセットされます（手入力：開始15:00）。</p>
+    </div>
+       <a href="#home" class="back-home">
+      トップへ戻る
+      </a>
+
+  </section>
+
+  <section id="border" class="screen" hidden>
+    <a href="#home" class="back">トップへ戻る</a>
+    <h2>ボーダーの確認・記録</h2>
+
+    <!-- 現在のボーダー -->
+    <div id="border-card">
+      <div class="border-card-heading">
+        <span>現在の1%ボーダー</span>
+        <span id="border-day">イベント8日目</span>
+      </div>
+
+      <div class="border-casts">
+        <div class="border-cast">
+          <p id="border-cast-1">BLACK:---</p>
+          <p class="border-label">1%ボーダー</p>
+          <p id="border-point-1">---</p>
+          <p id="border-time-1">最終更新：---</p>
+        </div>
+        <div class="border-cast">
+          <p id="border-cast-2">STAR:---</p>
+          <p class="border-label">1%ボーダー</p>
+          <p id="border-point-2">---</p>
+          <p id="border-time-2">最終更新：---</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ボーダー記録フォーム -->
+    <div id="border-input">
+      <h3>ボーダーを記録する</h3>
+
+      <div class="border-input-row">
+        <label for="input-event-day">イベント日
+          <select id="input-event-day">
+            <option value="1">Day 1</option>
+            <option value="2">Day 2</option>
+            <option value="3">Day 3</option>
+            <option value="4">Day 4</option>
+            <option value="5">Day 5</option>
+            <option value="6">Day 6</option>
+            <option value="7">Day 7</option>
+            <option value="8" selected>Day 8</option>
+            <option value="9">Day 9</option>
+            <option value="10">Day 10</option>
+            <option value="11">Day 11</option>
+            <option value="12">Day 12</option>
+            <option value="13">Day 13</option>
+            <option value="14">Day 14</option>
+          </select>
+        </label>
+
+        <label for="input-cast-name">キャスト
+          <select id="input-cast-name">
+            <option value="">キャストを選択してください</option>
+          </select>
+        </label>
+      </div>
+
+      <label for="input-border">1%ボーダー（pt）
+        <input
+          type="number"
+          id="input-border"
+          min="1"
+          max="20000000"
+          step="1"
+          inputmode="numeric"
+          placeholder="例：1234567"
+        >
+      </label>
+
+      <button id="save-border-button">ボーダーを記録する</button>
+      <p id="save-message" role="status" aria-live="polite"></p>
+    </div>
+
+    <!-- 過去のボーダー履歴 -->
+    <div id="border-history">
+      <h3>過去の1%ボーダー（14:30時点）</h3>
+      <div id="history-list">
+        <p>データを読み込んでいます……</p>
+      </div>
+    </div>
+
+    <a href="#home" class="back-home">トップへ戻る</a>
+  </section>
+
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.3"></script>
+<script src="script.js"></script>
+</body>
+</html>
