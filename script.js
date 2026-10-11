@@ -88,6 +88,14 @@ function getLatestBorders(data) {
     return latestByDayAndCast;
 }
 
+function formatBorderPoint(value) {
+    if (value === null || value === undefined || value === "") {
+        return "未記録";
+    }
+
+    return `${Number(value).toLocaleString("ja-JP")} pt`;
+}
+
 
 function updateHomeBorder() {
     const ids = [
@@ -244,6 +252,13 @@ async function loadBorders() {
                 "最終更新：データなし";
         }
 
+                // キャスト1の2%・3%ボーダー
+        document.getElementById("border-point-2-percent-1").textContent =
+            formatBorderPoint(cast1?.border_2_percent);
+
+        document.getElementById("border-point-3-percent-1").textContent =
+            formatBorderPoint(cast1?.border_3_percent);
+
         /*
          * キャスト2
          */
@@ -272,6 +287,13 @@ async function loadBorders() {
             document.getElementById("border-time-2").textContent =
                 "最終更新：データなし";
         }
+
+                // キャスト2の2%・3%ボーダー
+        document.getElementById("border-point-2-percent-2").textContent =
+            formatBorderPoint(cast2?.border_2_percent);
+
+        document.getElementById("border-point-3-percent-2").textContent =
+            formatBorderPoint(cast2?.border_3_percent);
     }
 
     /*
@@ -371,6 +393,18 @@ async function saveBorder() {
         const borderPoint =
             Number(borderValue);
 
+        const border2Value =
+            document.getElementById("input-border-2").value.trim();
+
+        const border3Value =
+            document.getElementById("input-border-3").value.trim();
+
+        const border2Point =
+            border2Value === "" ? null : Number(border2Value);
+
+        const border3Point =
+            border3Value === "" ? null : Number(border3Value);
+
         /*
          * 入力チェック
          */
@@ -398,7 +432,22 @@ async function saveBorder() {
             return;
         }
 
-        /*
+
+        if (
+            (border2Value !== "" &&
+                (!Number.isInteger(border2Point) ||
+                border2Point < 1 ||
+                border2Point > 20000000)) ||
+            (border3Value !== "" &&
+                (!Number.isInteger(border3Point) ||
+                border3Point < 1 ||
+                border3Point > 20000000))
+        ) {
+            message.textContent =
+                "2%・3%ボーダーは、空欄または1以上の整数で入力してください。";
+            return;
+        }
+                /*
          * Supabaseへ保存
          */
 
@@ -408,8 +457,9 @@ async function saveBorder() {
                 .insert({
                     event_day: eventDay,
                     cast_name: castName,
-                    observed_at: new Date().toISOString(),
-                    border_1_percent: borderPoint
+                    border_1_percent: borderPoint,
+                    border_2_percent: border2Point,
+                    border_3_percent: border3Point
                 })
                 .select();
 
@@ -437,6 +487,9 @@ async function saveBorder() {
             "input-border"
         ).value = "";
 
+        document.getElementById("input-border-2").value = "";
+        
+        document.getElementById("input-border-3").value = "";
         /*
          * 最新データを再取得
          */
