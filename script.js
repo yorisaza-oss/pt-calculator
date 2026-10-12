@@ -96,6 +96,26 @@ function formatBorderPoint(value) {
     return `${Number(value).toLocaleString("ja-JP")} pt`;
 }
 
+function formatBorderTime(border) {
+    if (!border) {
+        return "更新：未記録";
+    }
+
+    const observedDate = new Date(border.observed_at);
+
+    return `更新：${observedDate.toLocaleString("ja-JP")}`;
+}
+
+function getLatestPercentBorder(data, eventDay, castName, field) {
+    return data.find(border =>
+        border.event_day === eventDay &&
+        border.cast_name === castName &&
+        border[field] !== null &&
+        border[field] !== undefined &&
+        border[field] !== ""
+    );
+}
+
 
 function updateHomeBorder() {
     const ids = [
@@ -115,12 +135,12 @@ function updateHomeBorder() {
     const time2 = $("border-time-2").textContent;
 
     const times = [time1, time2]
-        .filter(time => time.startsWith("最終更新："))
-        .map(time => time.replace("最終更新：", ""));
+        .filter(time => time.startsWith("更新："))
+        .map(time => time.replace("更新：", ""));
 
     $("home-border-time").textContent =
         times.length > 0
-            ? `最終更新：${times.join(" ／ ")}`
+            ? `更新：${times.join(" ／ ")}`
             : time1;
 }
 
@@ -189,6 +209,26 @@ async function loadBorders() {
         document.getElementById("border-time-2").textContent =
             "イベント開催中に表示されます";
 
+                    // イベント期間外は、2%・3%の表示もリセットする
+        [
+            "border-point-2-percent-1",
+            "border-point-3-percent-1",
+            "border-point-2-percent-2",
+            "border-point-3-percent-2"
+        ].forEach(id => {
+            document.getElementById(id).textContent = "未記録";
+        });
+
+        [
+            "border-time-2-percent-1",
+            "border-time-3-percent-1",
+            "border-time-2-percent-2",
+            "border-time-3-percent-2"
+        ].forEach(id => {
+            document.getElementById(id).textContent =
+                "イベント開催中に表示されます";
+        });
+
     } else {
 
         // イベント期間中
@@ -241,7 +281,7 @@ async function loadBorders() {
                 new Date(cast1.observed_at);
 
             document.getElementById("border-time-1").textContent =
-                `最終更新：${observedDate1.toLocaleString("ja-JP")}`;
+                `更新：${observedDate1.toLocaleString("ja-JP")}`;
 
         } else {
 
@@ -249,16 +289,29 @@ async function loadBorders() {
                 "---";
 
             document.getElementById("border-time-1").textContent =
-                "最終更新：データなし";
+                "更新：データなし";
         }
 
-                // キャスト1の2%・3%ボーダー
+        // キャスト1の2%・3%ボーダーと、それぞれの最新記録
+        const cast1Two = getLatestPercentBorder(
+            data, currentEventDay, cast1Name, "border_2_percent"
+        );
+
+        const cast1Three = getLatestPercentBorder(
+            data, currentEventDay, cast1Name, "border_3_percent"
+        );
+
         document.getElementById("border-point-2-percent-1").textContent =
-            formatBorderPoint(cast1?.border_2_percent);
+            formatBorderPoint(cast1Two?.border_2_percent);
+
+        document.getElementById("border-time-2-percent-1").textContent =
+            formatBorderTime(cast1Two);
 
         document.getElementById("border-point-3-percent-1").textContent =
-            formatBorderPoint(cast1?.border_3_percent);
+            formatBorderPoint(cast1Three?.border_3_percent);
 
+        document.getElementById("border-time-3-percent-1").textContent =
+            formatBorderTime(cast1Three);
         /*
          * キャスト2
          */
@@ -277,7 +330,7 @@ async function loadBorders() {
                 new Date(cast2.observed_at);
 
             document.getElementById("border-time-2").textContent =
-                `最終更新：${observedDate2.toLocaleString("ja-JP")}`;
+                `更新：${observedDate2.toLocaleString("ja-JP")}`;
 
         } else {
 
@@ -285,16 +338,29 @@ async function loadBorders() {
                 "---";
 
             document.getElementById("border-time-2").textContent =
-                "最終更新：データなし";
+                "更新：データなし";
         }
 
-                // キャスト2の2%・3%ボーダー
+                // キャスト2の2%・3%ボーダーと、それぞれの最新記録
+        const cast2Two = getLatestPercentBorder(
+            data, currentEventDay, cast2Name, "border_2_percent"
+        );
+
+        const cast2Three = getLatestPercentBorder(
+            data, currentEventDay, cast2Name, "border_3_percent"
+        );
+
         document.getElementById("border-point-2-percent-2").textContent =
-            formatBorderPoint(cast2?.border_2_percent);
+            formatBorderPoint(cast2Two?.border_2_percent);
+
+        document.getElementById("border-time-2-percent-2").textContent =
+            formatBorderTime(cast2Two);
 
         document.getElementById("border-point-3-percent-2").textContent =
-            formatBorderPoint(cast2?.border_3_percent);
-    }
+            formatBorderPoint(cast2Three?.border_3_percent);
+
+        document.getElementById("border-time-3-percent-2").textContent =
+            formatBorderTime(cast2Three);
 
     /*
      * 過去のボーダー履歴
@@ -350,6 +416,7 @@ async function loadBorders() {
             historyList.appendChild(item);
         }
     }
+}
    updateHomeBorder();
 }
 
@@ -405,6 +472,10 @@ async function saveBorder() {
         const border3Point =
             border3Value === "" ? null : Number(border3Value);
 
+            console.log("2%入力値:", border2Value);
+            console.log("3%入力値:", border3Value);
+            console.log("保存する2%:", border2Point);
+            console.log("保存する3%:", border3Point);
         /*
          * 入力チェック
          */

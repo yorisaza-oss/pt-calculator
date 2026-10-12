@@ -184,14 +184,14 @@ input[type="number"]::placeholder { font-size: 0.85rem; color: #6e6a93; }
 }
 
 .border-label {
-  margin: 0 0 2px;
+  margin: 0;
   font-size: 0.75rem;
   color: var(--sub);
 }
 
 #border-point-1,
 #border-point-2 {
-  margin: 0;
+  margin-top: 8px;
   color: var(--gold);
   font-size: clamp(1rem, 4vw, 1.4rem);
   font-weight: 700;
@@ -199,14 +199,28 @@ input[type="number"]::placeholder { font-size: 0.85rem; color: #6e6a93; }
   overflow-wrap: anywhere;
 }
 
+
 #border-time-1,
-#border-time-2 {
-  margin: 8px 0 0;
-  font-size: 0.68rem;
+#border-time-2,
+#border-time-2-percent-1,
+#border-time-3-percent-1,
+#border-time-2-percent-2,
+#border-time-3-percent-2 {
+  margin-top: 2px;
+  font-size: 0.65rem;
   line-height: 1.5;
   color: var(--sub);
   overflow-wrap: anywhere;
 }
+
+#border-point-2-percent-1,
+#border-point-3-percent-1,
+#border-point-2-percent-2,
+#border-point-3-percent-2 {
+  margin-top: 6px;
+  font-size: 1.0rem;
+}
+
 
 /* ---------- ボーダー入力 ---------- */
 
@@ -346,10 +360,14 @@ input[type="number"]::placeholder { font-size: 0.85rem; color: #6e6a93; }
   .border-cast + .border-cast {
     padding-left: 8px;
   }
-
+    
   #border-time-1,
-  #border-time-2 {
-    font-size: 0.62rem;
+  #border-time-2,
+  #border-time-2-percent-1,
+  #border-time-3-percent-1,
+  #border-time-2-percent-2,
+  #border-time-3-percent-2 {
+    font-size: 0.6rem;
   }
 
   .border-input-row {
@@ -453,8 +471,10 @@ input[type="number"]::placeholder { font-size: 0.85rem; color: #6e6a93; }
   white-space: nowrap;
 }
 
-#border-time-1,
+/* スマートフォンでもキャスト2の更新時刻を1行にする */
 #border-time-2 {
-  white-space: nowrap;
-  font-size: 10px;
+  white-space: nowrap !important;
+  word-break: keep-all;
+  overflow-wrap: normal;
+  font-size: clamp(7px, 2.5vw, 10px);
 }
