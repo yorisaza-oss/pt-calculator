@@ -90,7 +90,7 @@ function getLatestBorders(data) {
 
 function formatBorderPoint(value) {
     if (value === null || value === undefined || value === "") {
-        return "未記録";
+        return "---";
     }
 
     return `${Number(value).toLocaleString("ja-JP")} pt`;
@@ -98,7 +98,7 @@ function formatBorderPoint(value) {
 
 function formatBorderTime(border) {
     if (!border) {
-        return "更新：未記録";
+        return "更新：---";
     }
 
     const observedDate = new Date(border.observed_at);
@@ -216,7 +216,7 @@ async function loadBorders() {
             "border-point-2-percent-2",
             "border-point-3-percent-2"
         ].forEach(id => {
-            document.getElementById(id).textContent = "未記録";
+            document.getElementById(id).textContent = "---";
         });
 
         [
