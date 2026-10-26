@@ -20,7 +20,7 @@ async function loadArchive() {
         .order("cast_name", { ascending: true });
 
     if (error) {
-        console.error("アーカイブ取得エラー:", error);
+        console.error("アーカイブ取得エラー:", JSON.stringify(error, null, 2));
         statusElement.textContent =
             "記録を読み込めませんでした。時間をおいて再度お試しください";
         return;
