@@ -38,24 +38,63 @@ async function loadArchive() {
         return `${Number(value).toLocaleString("ja-JP")} pt`;
     };
 
-    contentElement.replaceChildren();
 
-    for (const record of data) {
-        const card = document.createElement("section");
+contentElement.replaceChildren();
+
+const days = new Map();
+
+for (const record of data) {
+    if (!days.has(record.event_day)) {
+        days.set(record.event_day, []);
+    }
+    days.get(record.event_day).push(record);
+}
+
+for (const [day, records] of days) {
+    const daySection = document.createElement("section");
+    daySection.className = "archive-day";
+
+    const dayHeading = document.createElement("h2");
+    dayHeading.className = "archive-day-heading";
+    dayHeading.textContent =
+        `DAY ${String(day).padStart(2, "0")}　${day}日目`;
+
+    const cardGrid = document.createElement("div");
+    cardGrid.className = "archive-card-grid";
+
+    for (const record of records) {
+        const card = document.createElement("article");
         card.className = "archive-card";
 
         const heading = document.createElement("h3");
-        heading.textContent = `${record.event_day}日目｜${record.cast_name}`;
+        heading.className = "archive-card-heading";
+        heading.textContent = record.cast_name;
 
         const borderLabel = document.createElement("p");
-        borderLabel.textContent =
-            `最終1％ボーダー：${formatPt(record.final_border_1_percent)}`;
+        borderLabel.className = "archive-metric-label";
+        borderLabel.textContent = "最終1％ボーダー";
+
+        const borderValue = document.createElement("p");
+        borderValue.className = "archive-metric-value";
+        borderValue.textContent =
+            formatPt(record.final_border_1_percent);
 
         const totalLabel = document.createElement("p");
-        totalLabel.textContent =
-            `全プレイヤーの総合pt：${formatPt(record.total_player_at)}`;
+        totalLabel.className = "archive-metric-label";
+        totalLabel.textContent = "全プレイヤーの総合pt";
 
-        card.append(heading, borderLabel, totalLabel);
+        const totalValue = document.createElement("p");
+        totalValue.className = "archive-metric-value";
+        totalValue.textContent =
+            formatPt(record.total_player_at);
+
+        card.append(
+            heading,
+            borderLabel,
+            borderValue,
+            totalLabel,
+            totalValue
+        );
 
         if (record.recorded_at) {
             const dateLabel = document.createElement("p");
@@ -67,14 +106,14 @@ async function loadArchive() {
 
         if (record.note) {
             const noteLabel = document.createElement("p");
+            noteLabel.className = "archive-note";
             noteLabel.textContent = `備考：${record.note}`;
             card.append(noteLabel);
         }
 
-        contentElement.append(card);
+        cardGrid.append(card);
     }
 
-    statusElement.textContent = `${data.length}件の記録を読み込みました。`;
+    daySection.append(dayHeading, cardGrid);
+    contentElement.append(daySection);
 }
-
-loadArchive();
