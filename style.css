@@ -626,3 +626,27 @@ input[type="number"]::placeholder { font-size: 0.85rem; color: #6e6a93; }
         margin: 28px 0;
     }
 }
+
+
+/* ボーダー画面：アーカイブへのリンク */
+.archive-link-area {
+    margin: 28px 0 12px;
+    text-align: center;
+}
+
+.archive-link {
+    display: inline-block;
+    padding: 12px 24px;
+    border: 1px solid #d4b46a;
+    border-radius: 8px;
+    color: #d4b46a;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.archive-link:hover {
+    background-color: #d4b46a;
+    color: #0a0b24;
+}
+
