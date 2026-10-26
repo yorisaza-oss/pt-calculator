@@ -117,3 +117,4 @@ for (const [day, records] of days) {
     daySection.append(dayHeading, cardGrid);
     contentElement.append(daySection);
 }
+    statusElement.textContent = `${data.length}件の記録を読み込みました。`;
