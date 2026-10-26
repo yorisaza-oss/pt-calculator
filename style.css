@@ -478,3 +478,151 @@ input[type="number"]::placeholder { font-size: 0.85rem; color: #6e6a93; }
   overflow-wrap: normal;
   font-size: clamp(7px, 2.5vw, 10px);
 }
+
+
+/* ===== イベントアーカイブ ===== */
+
+.archive-container {
+    width: min(100% - 32px, 1000px);
+    margin: 0 auto;
+    padding: 40px 0 56px;
+    color: #f3f0e8;
+}
+
+.archive-header {
+    text-align: center;
+    padding: 32px 16px 28px;
+}
+
+.archive-eyebrow,
+.archive-subtitle {
+    color: #d4b46a;
+    letter-spacing: 0.12em;
+}
+
+.archive-header h1 {
+    margin: 16px 0 8px;
+    font-size: clamp(1.6rem, 5vw, 2.4rem);
+}
+
+.archive-subtitle {
+    margin: 0;
+    letter-spacing: 0.2em;
+}
+
+.archive-navigation {
+    margin: 0 0 32px;
+}
+
+.archive-navigation a {
+    color: #d4b46a;
+    text-decoration: none;
+}
+
+.archive-navigation a:hover {
+    text-decoration: underline;
+}
+
+.archive-section h2 {
+    color: #d4b46a;
+}
+
+.archive-description {
+    line-height: 1.8;
+    color: #c9c8d5;
+}
+
+#archive-status {
+    margin: 20px 0;
+    color: #d4b46a;
+    font-size: 0.9rem;
+}
+
+.archive-day {
+    margin: 36px 0;
+    scroll-margin-top: 20px;
+}
+
+.archive-day-heading {
+    padding: 0 0 12px;
+    margin: 0 0 18px;
+    border-bottom: 1px solid #665637;
+    color: #d4b46a;
+    font-size: 1.35rem;
+    letter-spacing: 0.04em;
+}
+
+.archive-card-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.archive-card {
+    min-width: 0;
+    padding: 22px;
+    background: #14163a;
+    border: 1px solid #393957;
+    border-radius: 12px;
+    overflow-wrap: anywhere;
+}
+
+.archive-card-heading {
+    margin: 0 0 22px;
+    color: #e5cb87;
+    font-size: 1.2rem;
+}
+
+.archive-metric-label {
+    margin: 16px 0 6px;
+    color: #b9b7c9;
+    font-size: 0.88rem;
+}
+
+.archive-metric-value {
+    margin: 0;
+    color: #f4e8c8;
+    font-size: clamp(1.05rem, 2.5vw, 1.4rem);
+    font-weight: 600;
+    line-height: 1.6;
+    font-variant-numeric: tabular-nums;
+}
+
+.archive-recorded-at,
+.archive-note {
+    margin: 18px 0 0;
+    padding-top: 12px;
+    border-top: 1px solid #393957;
+    color: #b9b7c9;
+    font-size: 0.8rem;
+    line-height: 1.7;
+}
+
+.archive-footer {
+    margin-top: 48px;
+    padding-top: 20px;
+    border-top: 1px solid #393957;
+    color: #b9b7c9;
+    font-size: 0.8rem;
+    text-align: center;
+}
+
+@media (max-width: 600px) {
+    .archive-container {
+        width: min(100% - 24px, 1000px);
+        padding-top: 20px;
+    }
+    .archive-header {
+        padding: 24px 8px;
+    }
+    .archive-card-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    .archive-card {
+        padding: 18px;
+    }
+    .archive-day {
+        margin: 28px 0;
+    }
+}
