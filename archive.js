@@ -15,7 +15,7 @@ async function loadArchive() {
 
     const { data, error } = await supabaseClient
         .from("cast_final_results")
-        .select("event_day, cast_name, final_border_1_percent, total_player_pt, recorded_at, note")
+        .select("event_day, cast_name, final_border_1_percent, total_player_at, recorded_at, note")
         .order("event_day", { ascending: true })
         .order("cast_name", { ascending: true });
 
@@ -53,7 +53,7 @@ async function loadArchive() {
 
         const totalLabel = document.createElement("p");
         totalLabel.textContent =
-            `全プレイヤーの総合pt：${formatPt(record.total_player_pt)}`;
+            `全プレイヤーの総合pt：${formatPt(record.total_player_at)}`;
 
         card.append(heading, borderLabel, totalLabel);
 
