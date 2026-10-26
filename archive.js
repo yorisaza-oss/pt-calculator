@@ -121,3 +121,4 @@ for (const [day, records] of days) {
 }
 
 loadArchive();
+}
